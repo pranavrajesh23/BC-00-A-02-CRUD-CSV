@@ -26,6 +26,26 @@ struct Record
     }
 };
 
+
+
+void sortSalesCsv(vector<Record> &records)
+{
+    cout<<"\nSORTING THE SALES.CSV FILE IN REGARD OF THE DATE OF PURCHASE\n";
+    sort(records.begin(),records.end(),[](Record &a, Record &b)
+    {
+        int d1,d2,m1,m2,y1,y2;
+        sscanf(a.date.c_str(),"%d/%d/%d",&d1,&m1,&y1);
+        sscanf(b.date.c_str(),"%d/%d/%d",&d2,&m2,&y2);
+
+        if (y1!=y2) return y1<y2;
+        if(m1 !=m2) return m1<m2;
+        return d1<d2;
+        // return a.date < b.date;
+    });
+    // for(auto a:records)
+    // {
+    //     cout<<a.ofline<<"\n";
+    // }
 }
 
 void readSalesCsv(string &fname, vector<Record> &records)
