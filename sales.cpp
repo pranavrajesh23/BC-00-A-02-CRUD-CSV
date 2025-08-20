@@ -28,6 +28,23 @@ struct Record
 
 
 
+void writeTempCsv(vector<Record> &records, string &filename, string &header)
+{
+    cout<<"\nWRITING THE SORTED DATA INTO TEMP.CSV\n";
+    ofstream temp(filename);
+    if(!temp.is_open())
+    {
+        cout<<"\nFailed to open the file\n";
+        exit(1);
+    }
+    temp<<header<<"\n";
+    for(auto rec: records)
+    {
+        temp<<rec.ogline<<"\n";
+    }
+    temp.close();
+}
+
 void sortSalesCsv(vector<Record> &records)
 {
     cout<<"\nSORTING THE SALES.CSV FILE IN REGARD OF THE DATE OF PURCHASE\n";
