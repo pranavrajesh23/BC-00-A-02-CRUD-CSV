@@ -27,6 +27,79 @@ struct Record
 };
 
 
+void updateInCsv(string &fname,string &header)
+{
+    cout<<"\nUPDATING THE DATA ON SALE.CSV FILE\n";
+    fstream sales(fname);
+    fstream temp("temp.csv");
+    temp<<header<<"\n";
+    int n;
+    cout<<"\nHow many rows you need to update\n";
+    cin>>n;
+    string line;
+    getline(sales,line);
+    for(int i=0;i<n;i++)
+    {
+        int target;
+        cout<<"\nEnter the target salesID:\n";
+        cin>>target;
+        while(getline(sales,line))
+        {
+            stringstream ss(line);
+            string date,salesID,itemName,itemQuantity,unitPrice;
+            getline(ss,date,','); 
+            getline(ss,salesID,',');
+            getline(ss,itemName,',');
+            getline(ss,itemQuantity,',');
+            getline(ss,unitPrice);
+                if(target==stoi(salesID))
+            {
+                int ch;
+                cout<<"\nWhich one you need to update\n1.date\n2.itemname\n3.itemquantity\n4.unitprice\n5.all\n";
+                cin>>ch;
+                switch(ch)
+                {
+                    case 1:
+                        cout<<"\nEnter the updated date:\n";cin>>date;
+                        break;
+                    case 2:
+                        cout<<"\nEnter the updated item name:\n";cin>>itemName;
+                        break;
+                    case 3:
+                        cout<<"\nEnter the updated item quantity:\n";cin>>itemQuantity;
+                        break;
+                    case 4:
+                        cout<<"\nEnter the updated unit price:\n";cin>>unitPrice;
+                        break;
+                    case 5:
+                        cout<<"\nEnter all the updated details:\n";
+                        cout<<"\nEnter the date:\n";
+                        cin>>date;
+                        cout<<"\nEnter the item name:\n";
+                        cin>>itemName;
+                        cout<<"\nEnter the item quantity:\n";
+                        cin>>itemQuantity;
+                        cout<<"\nEnter the unit price:\n";
+                        cin>>unitPrice;
+                        break;
+                    default:
+                        cout<<"\nInvalid option:";
+                        break;
+                }
+                temp<<date<<","<<salesID<<","<<itemName<<","<<itemQuantity<<","<<unitPrice<<"\n";
+            }
+            else{
+                temp<<date<<","<<salesID<<","<<itemName<<","<<itemQuantity<<","<<unitPrice<<"\n";
+            }
+        }
+    }
+    sales.close();
+    temp.close();
+    remove("sales.csv");
+    rename("temp.csv","sales.csv");
+}
+
+
 int createSalesCsv(string &fname,string &header,int saleID)
 {
     cout<<"\nCREATING THE SALES.CSV FILE AND APPENDING THE DATA\n";
