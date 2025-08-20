@@ -28,6 +28,27 @@ struct Record
 
 }
 
+void readSalesCsv(string &fname, vector<Record> &records)
+{
+    cout<<"\nREADING THE SALES.CSV\n";
+    ifstream read(fname);
+    if(!read.is_open())
+    {
+        cout<<"\nError opening file\n";
+        exit(1);
+    }
+    string summa,line;
+    getline(read,summa);
+    while(getline(read,line))
+    {
+        if(!line.empty())
+        {
+            records.emplace_back(line);
+        }
+    }
+    read.close();
+}
+
 void deleteInCsv(string &fname,string &header)
 {
     cout<<"\nDELETING THE DATA ON SALE.CSV FILE\n";
