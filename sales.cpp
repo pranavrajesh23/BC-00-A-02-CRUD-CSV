@@ -26,7 +26,69 @@ struct Record
     }
 };
 
+void reportTxt(vector<Record> &records, string &filename,string &header) {
+    cout << "\nWRITING THE TEMP.CSV INTO THE REPORT.TXT FILE\n";
+    ofstream report(filename);
+    time_t now = time(nullptr);
+    tm *ltm = localtime(&now);
 
+    report << "Date : " << setfill('0') << setw(2) << ltm->tm_mday << "-"
+           << setw(2) << 1 + ltm->tm_mon << "-"
+           << 1900 + ltm->tm_year << "\n\n";
+
+    report << "Sales Report : Stationary Items Sold\n";
+    report << string(75, '-') << endl;
+    string h1,h2,h3,h4,h5,h6="SALESAMOUNT";
+    stringstream ss(header);
+    getline(ss,h1,',');
+    getline(ss,h2,',');
+    getline(ss,h3,',');
+    getline(ss,h4,',');
+    getline(ss,h5);
+    report << left <<setfill(' ')<< setw(12) <<h1
+           << setw(12) << h2
+           << setw(10) <<h3
+           << right << setw(10) <<h4
+           << setw(12) << h5
+           << setw(14) << h6 << endl;
+
+    report << string(75, '-') << endl;
+
+    string currentdate = "";
+    double subtotal = 0.0, grandtotal = 0.0;
+
+    report << fixed << setprecision(2);
+
+    for (auto &record : records) {
+        double total = stoi(record.itemQuantity) * stod(record.unitPrice);
+        string formatDate = record.date.substr(6, 4) + "-" + record.date.substr(3, 2) + "-" + record.date.substr(0, 2);
+        if (!currentdate.empty() && record.date != currentdate) {
+            report << string(75, '-') << endl;
+            report << right << setw(47) << "SUBTOTAL FOR " << currentdate << " = " << setw(10) << subtotal << endl;
+            report << string(75, '-') << endl;
+            grandtotal += subtotal;
+            subtotal = 0;
+        }
+        report << left << setw(12) << formatDate
+               << setw(12) << record.saleID
+               << setw(10) << record.itemName
+               << right << setw(10) << record.itemQuantity
+               << setw(12) << record.unitPrice
+               << setw(14) << total << endl;
+
+        subtotal += total;
+        currentdate = record.date;
+    }
+    if (!records.empty()) {
+        report << string(75, '-') << endl;
+        report << right << setw(47) << "SUBTOTAL FOR " << currentdate << " = " << setw(10) << subtotal << endl;
+        report << string(75, '-') << endl;
+        grandtotal += subtotal;
+    }
+
+    report << "\n" <<"GRAND TOTAL : " << setw(10) << grandtotal << endl;
+    report.close();
+}
 
 void writeTempCsv(vector<Record> &records, string &filename, string &header)
 {
