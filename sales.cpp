@@ -26,6 +26,46 @@ struct Record
     }
 };
 
+}
+
+void deleteInCsv(string &fname,string &header)
+{
+    cout<<"\nDELETING THE DATA ON SALE.CSV FILE\n";
+    fstream sales(fname);
+    fstream temp("temp.csv");
+    int n;
+    cout<<"\nHow many rows you need to delete\n";
+    cin>>n;
+    string line;
+    getline(sales,line);
+    for(int i=0;i<n;i++)
+    {
+        int target;
+        cout<<"\nEnter the target salesID:\n";
+        cin>>target;
+        while(getline(sales,line))
+        {
+            stringstream ss(line);
+            string date,salesID,itemName,itemQuantity,unitPrice;
+            getline(ss,date,','); 
+            getline(ss,salesID,',');
+            getline(ss,itemName,',');
+            getline(ss,itemQuantity,',');
+            getline(ss,unitPrice);
+            if(target==stoi(salesID))
+            {
+                continue;
+            }
+            else{
+                temp<<date<<","<<salesID<<","<<itemName<<","<<itemQuantity<<","<<unitPrice<<"\n";
+            }
+        }
+    }
+    sales.close();
+    temp.close();
+    remove("sales.csv");
+    rename("temp.csv","sales.csv");
+}
 
 void updateInCsv(string &fname,string &header)
 {
